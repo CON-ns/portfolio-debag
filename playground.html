@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <title></title>
+    <meta name="description" content="" />
+
+    <!-- favicon/webclipicon -->
+    <!-- <link rel="icon" href="favicon.ico" /> -->
+    <!-- <link rel="icon" href="favicon.svg" type="image/">
+    <link rel="apple-touch-icon" href="webclip.png" /> -->
+
+    <!-- ogp -->
+    <meta property="og:site_name" content="サイト名" />
+    <meta property="og:url" content="URL" />
+    <meta property="og:type" content="website or article" />
+    <meta property="og:title" content="ページのタイトル" />
+    <meta property="og:description" content="ページの説明" />
+    <meta property="og:image" content="URL" />
+    <meta property="og:locale" content="ja_JP" />
+    <!-- <meta property="fb:app_id" content="AppID"> -->
+    <meta name="twitter:card" content="summary_large_image or summary" />
+    <!-- <meta name="twitter:site" content="" /> -->
+    <meta name="twitter:description" content="ページの説明" />
+    <meta name="twitter:image:src" content="URL" />
+
+    <!-- css -->
+
+    <!-- EloquentJFPro -->
+    <link rel="stylesheet" href="https://use.typekit.net/xsr1ckp.css" />
+    <!-- Alber New -->
+    <link rel="stylesheet" href="https://use.typekit.net/rtt7kwm.css" />
+    <!-- muli -->
+    <link rel="stylesheet" href="https://use.typekit.net/scf2bha.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <main class="p-playground" id="js-playground">
+      <ul class="p-playground__list js-itemsWrapper">
+        <li class="p-playground__item js-hovList is-view">
+          <a
+            class="p-playground__link js-hovLink"
+            href="https://shader-gallery-80kc5l3mp-con-ns.vercel.app/"
+          >
+            <img class="js-hovImg" src="./assets/images/link-1.jpg" alt="" />
+            <h2 class="p-playground__ttl">Shader Distortion Gallery</h2>
+            <div class="p-playground__detail">Three.js/shader</div>
+            <p class="p-playground__detail">
+              referred
+              to:https://zenn.dev/bokoko33/articles/bd6744879af0d5(これあとからデプロイ先に書く)
+            </p>
+            <p></p>
+          </a>
+        </li>
+        <li class="p-playground__item js-hovList">
+          <a
+            class="p-playground__link js-hovLink"
+            href="https://threejs-crystal-wolf.vercel.app/"
+          >
+            <img class="js-hovImg" src="./assets/images/link-2.jpg" alt="" />
+            <h2 class="p-playground__ttl">Crystal Diamond</h2>
+            <p class="p-playground__detail">Three.js/mapping</p>
+            <p></p>
+          </a>
+        </li>
+        <li class="p-playground__item js-hovList">
+          <a
+            class="p-playground__link js-hovLink"
+            href="https://ripple-shader.vercel.app/"
+          >
+            <img class="js-hovImg" src="./assets/images/link-4.jpg" alt="" />
+            <h2 class="p-playground__ttl">Ripple</h2>
+            <p class="p-playground__detail">Three.js/shader</p>
+            <p></p>
+          </a>
+        </li>
+        <li class="p-playground__item js-hovList">
+          <a
+            class="p-playground__link js-hovLink"
+            href="https://colorful-mouse-stalker.vercel.app/"
+          >
+            <img class="js-hovImg" src="./assets/images/link-1.jpg" alt="" />
+            <h2 class="p-playground__ttl">Colorful-Mouse-Stalker</h2>
+            <p class="p-playground__detail">Canvas2D</p>
+            <p></p>
+          </a>
+        </li>
+        <li class="p-playground__item js-hovList">
+          <a
+            class="p-playground__link js-hovLink"
+            href="https://hover-glitch.vercel.app/"
+          >
+            <img class="js-hovImg" src="./assets/images/link-2.jpg" alt="" />
+            <h2 class="p-playground__ttl">Hover-Glitch-Effect</h2>
+            <p class="p-playground__detail">CSS</p>
+            <p></p>
+          </a>
+        </li>
+      </ul>
+    </main>
+
+    <div class="background--custom">
+      <canvas id="canvas-bg"></canvas>
+    </div>
+    <div class="cursorInner" id="js-cursorInner" aria-hidden="true"></div>
+    <div class="cursorOuter u-font__eloquent" id="js-cursorOuter">
+      <p>Coming</p>
+      <p>Soon</p>
+    </div>
+
+    <script id="vertex-pc" type="x-shader/x-vertex">
+      uniform vec2 uOffset;
+      varying vec2 vUv;
+
+
+       vec3 deformationCurve(vec3 position, vec2 uv, vec2 offset) {
+                float M_PI = 3.1415926535897932384626433832795;
+                position.x = position.x + (sin(uv.y * M_PI) * offset.x);
+                position.y = position.y + (sin(uv.x * M_PI) * offset.y);
+                return position;
+              }
+
+      void main(){
+        vUv = uv + (uOffset * 2.);
+        vec3 newPosition = position;
+        newPosition = deformationCurve(position,uv,uOffset);
+        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(newPosition,1.0);
+      }
+    </script>
+    <script id="fragment-pc" type="x-shader/x-fragment">
+      uniform sampler2D uTexture;
+uniform float uAlpha;
+varying vec2 vUv;
+uniform vec3 uColor;
+
+vec2 scaleUV(vec2 uv, float scale) {
+  float center = 0.5;
+  return ((uv - center) * scale) + center;
+}
+void main() {
+  vec3 color = texture2D(uTexture, scaleUV(vUv, 0.8)).rgb;
+  gl_FragColor = vec4(color, uAlpha);
+          // gl_FragColor = vec4(color,1.0);
+}
+    </script>
+    <script id="vertex-sp" type="x-shader/x-vertex">
+      varying vec2 vUv;
+uniform float uTime;
+
+float PI = 3.1415926535897932384626433832795;
+
+void main() {
+  vUv = uv;
+  vec3 pos = position;
+
+          // 横方向
+  float amp = 0.03; // 振幅（の役割） 大きくすると波が大きくなる
+  float freq = 0.01 * uTime; // 振動数（の役割） 大きくすると波が細かくなる
+
+          // 縦方向
+  float tension = -0.001 * uTime; // 上下の張り具合
+
+  pos.x = pos.x + sin(pos.y * PI * freq) * amp;
+  pos.y = pos.y + (cos(pos.x * PI) * tension);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+}
+    </script>
+    <script id="fragment-sp" type="x-shader/x-fragment">
+      varying vec2 vUv;
+        uniform sampler2D uTexture;
+        uniform float uTime;
+  
+        void main(){
+          //rgbシフトありの場合以下を適応(uTimeに乗算する数値でシフト幅を調整)
+          vec2 offset = vec2(0.0,uTime * 0.0003);
+          vec3 normalColor = texture2D(uTexture,vUv).rgb;
+          gl_FragColor = vec4(normalColor, 1.0);
+        }
+    </script>
+
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+          "FontLoader": "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js",
+          "TextGeometry": "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js"
+        }
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/greentfrapp/pocoloco@minigl/minigl.js"></script>
+    <script src="./assets/js/script.js" type="module"></script>
+    <script src="./assets/js/playground.js" crossorigin type="module"></script>
+  </body>
+</html>
