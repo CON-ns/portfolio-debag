@@ -8,20 +8,109 @@ import { StickAnime } from "./_class.js";
 
 const winH = innerHeight;
 const winW = innerWidth;
+const loader = document.querySelector('.js-loader');
 let scrollY; //スクロール量格納用
 let mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 
 window.addEventListener("DOMContentLoaded", function () {
-  // fvBg();
   fvParallax();
   mediaQueryFunc();
   aboutAnime();
   worksSlide();
   textFlow();
   scaleIn();
-  // animate();
 });
 
+
+//-----------------------------------------------------------------------
+//拡大禁止
+// document.body.addEventListener('touchmove', (e) => {
+//   if (e.touches.length > 1) {
+//     e.preventDefault();
+//   }
+// }, {passive: false});
+
+// document.body?.addEventListener(
+//   "wheel",
+//   (e) => {
+//     e.preventDefault();
+//   },
+//   { passive: false }
+//   );
+//-----------------------------------------------------------------------
+//ローディング
+window.onload = function(){
+  setTimeout(() => {
+    loader.classList.add('is-loaded');
+    loader.setAttribute('style',`height:0px;`)
+  }, 2000);
+}
+
+
+init();
+async function init() {
+
+  const renderer = new THREE.WebGLRenderer({ 
+    antialias: true,
+    alpha:true,
+  });
+
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xffffff,0);
+  loader.appendChild(renderer.domElement);
+  renderer.domElement.classList.add('loader-canvas');
+  const canvas = document.querySelector('.loader-canvas');
+  const canvasW = canvas.clientWidth;
+  const canvasH = canvas.clientHeight;
+
+  const scene = new THREE.Scene();
+  const fov = 60;
+
+  const fovRad = (fov / 2) * (Math.PI / 180);
+const dist = canvasW / 2 / Math.tan(fovRad);
+const camera = new THREE.PerspectiveCamera(
+  fov,
+  canvasW / canvasH,
+  0.1,
+  10000
+);
+camera.position.z = dist;
+
+  
+  
+  async function loadTex(url) {
+    const texLoader = new THREE.TextureLoader();
+    const texture = await texLoader.loadAsync(url);
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.MirroredRepeatWrapping;
+    return texture;
+  }
+ 
+  const geometry = new THREE.PlaneGeometry(canvasW * 2,canvasH * 2);
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      uTick: { value: 0 },
+    },
+    vertexShader:vertex,
+    fragmentShader:fragment,
+    transparent: true,
+  });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+  
+  let previousTime = 0;
+  let elapsed;
+  function animate() {
+    const currentTime = performance.now();
+    elapsed = ((currentTime - previousTime) / 1000).toFixed(2);
+    requestAnimationFrame(animate);
+     material.uniforms.uTick.value = elapsed;
+    renderer.render(scene, camera);
+  }
+  
+  animate();
+}
 //----------------------------------------------------------------
 //マウスストーカー
 let cursorX, cursorY;
