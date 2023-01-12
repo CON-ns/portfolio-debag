@@ -1,14 +1,13 @@
+import * as THREE from "three";
 import { GetScrollNum } from "./_class.js";
 import { ScrollFunction } from "./_class.js";
 import { ScrollObserver } from "./_class.js";
 import { SplitTextAnimation } from "./_class.js";
 import { SplitText } from "./_class.js";
 import { StickAnime } from "./_class.js";
-// import gsap from "gsap";
 
 const winH = innerHeight;
 const winW = innerWidth;
-const loader = document.querySelector('.js-loader');
 let scrollY; //スクロール量格納用
 let mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 
@@ -20,97 +19,6 @@ window.addEventListener("DOMContentLoaded", function () {
   textFlow();
   scaleIn();
 });
-
-
-//-----------------------------------------------------------------------
-//拡大禁止
-// document.body.addEventListener('touchmove', (e) => {
-//   if (e.touches.length > 1) {
-//     e.preventDefault();
-//   }
-// }, {passive: false});
-
-// document.body?.addEventListener(
-//   "wheel",
-//   (e) => {
-//     e.preventDefault();
-//   },
-//   { passive: false }
-//   );
-//-----------------------------------------------------------------------
-//ローディング
-window.onload = function(){
-  setTimeout(() => {
-    loader.classList.add('is-loaded');
-    loader.setAttribute('style',`height:0px;`)
-  }, 2000);
-}
-
-
-init();
-async function init() {
-
-  const renderer = new THREE.WebGLRenderer({ 
-    antialias: true,
-    alpha:true,
-  });
-
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xffffff,0);
-  loader.appendChild(renderer.domElement);
-  renderer.domElement.classList.add('loader-canvas');
-  const canvas = document.querySelector('.loader-canvas');
-  const canvasW = canvas.clientWidth;
-  const canvasH = canvas.clientHeight;
-
-  const scene = new THREE.Scene();
-  const fov = 60;
-
-  const fovRad = (fov / 2) * (Math.PI / 180);
-const dist = canvasW / 2 / Math.tan(fovRad);
-const camera = new THREE.PerspectiveCamera(
-  fov,
-  canvasW / canvasH,
-  0.1,
-  10000
-);
-camera.position.z = dist;
-
-  
-  
-  async function loadTex(url) {
-    const texLoader = new THREE.TextureLoader();
-    const texture = await texLoader.loadAsync(url);
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.MirroredRepeatWrapping;
-    return texture;
-  }
- 
-  const geometry = new THREE.PlaneGeometry(canvasW * 2,canvasH * 2);
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      uTick: { value: 0 },
-    },
-    vertexShader:vertex,
-    fragmentShader:fragment,
-    transparent: true,
-  });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-  
-  let previousTime = 0;
-  let elapsed;
-  function animate() {
-    const currentTime = performance.now();
-    elapsed = ((currentTime - previousTime) / 1000).toFixed(2);
-    requestAnimationFrame(animate);
-     material.uniforms.uTick.value = elapsed;
-    renderer.render(scene, camera);
-  }
-  
-  animate();
-}
 //----------------------------------------------------------------
 //マウスストーカー
 let cursorX, cursorY;
@@ -123,28 +31,25 @@ window.addEventListener("mousemove", function (e) {
   cursorInner.setAttribute(
     "style",
     `transform:translate(${cursorX}px,${cursorY}px)`
+  );
+  if (cursorOuter !== null) {
+    cursorOuter.setAttribute(
+      "style",
+      `transform:translate(${cursorX}px,${cursorY}px)`
     );
-    if (cursorOuter !== null) {
-      cursorOuter.setAttribute(
-        "style",
-        `transform:translate(${cursorX}px,${cursorY}px) scale(${scale})`
-        );
-      }
-    });
-    
-    const linkEls = document.querySelectorAll('a');
-    linkEls.forEach(link => {
-      link.addEventListener('mouseover', function () {
-        cursorInner.classList.add('is-hovLink');
-      });
-      link.addEventListener('mouseout', function () {
-        cursorInner.classList.remove('is-hovLink');
-      });
-    })
-    //----------------------------------------------------------------
-    
-    
+  }
+});
 
+const linkEls = document.querySelectorAll("a");
+linkEls.forEach((link) => {
+  link.addEventListener("mouseover", function () {
+    cursorInner.classList.add("is-hovLink");
+  });
+  link.addEventListener("mouseout", function () {
+    cursorInner.classList.remove("is-hovLink");
+  });
+});
+//----------------------------------------------------------------
 //スクロール方向検知
 let scrollDir = "down";
 let set_position = 0;
@@ -256,7 +161,6 @@ const contactSecSo = new ScrollObserver(
   "-100px 0px -100px 0px",
   { once: false }
 );
-
 //----------------------------------------------------------------
 //テキストアニメーション用関数
 
@@ -280,8 +184,16 @@ const cbTxtRtL = function (el, isIntersecting) {
   }
 };
 
-const soTxtLtR = new ScrollObserver(document.querySelectorAll(".targetLtR"), cbTxtLtR,"0px 0px -150px 0px");
-const soTxtRtL = new ScrollObserver(document.querySelectorAll(".targetRtL"), cbTxtRtL,"0px 0px -150px 0px");
+const soTxtLtR = new ScrollObserver(
+  document.querySelectorAll(".targetLtR"),
+  cbTxtLtR,
+  "0px 0px -150px 0px"
+);
+const soTxtRtL = new ScrollObserver(
+  document.querySelectorAll(".targetRtL"),
+  cbTxtRtL,
+  "0px 0px -150px 0px"
+);
 //.fadeUpTargetに対してfadeUpアニメーションを実行
 const aboutSo = new ScrollObserver(
   document.querySelectorAll(".fadeUpTarget"),
@@ -354,7 +266,7 @@ function aboutAnime() {
 
   //scrollBaseの上限値を設定するための変数
   const scrollBaseMax = winW * 1.5;
-  const opNum = new ScrollFunction(aboutImg, scrollMax, 0, ease, 0.5,1);//画像のopacityをスクロールで変化させる
+  const opNum = new ScrollFunction(aboutImg, scrollMax, 0, ease, 0.5, 1); //画像のopacityをスクロールで変化させる
 
   window.addEventListener("scroll", function () {
     const transY = imgTransform.resultNormal;
@@ -405,13 +317,11 @@ function aboutAnime() {
   ScrollTrigger.create({
     trigger: ".js-about",
     pin: true,
-    // pinSpacing: false
   });
 
   ScrollTrigger.create({
     trigger: ".js-about--2d",
     pin: true,
-    // pinSpacing: false
   });
 }
 
@@ -458,24 +368,17 @@ function fvParallax() {
     },
   });
 }
-
 //----------------------------------------------------------------
 //worksのスライダーカスタマイズ
 
 function worksSlide() {
-  const ttlSlide = document.querySelector(".js-ttlSlide");
-  // let ttlSlideH = ttlSlide.clientHeight;
-  const handleSlide = document.querySelector(".js-handleSlide");
-  // let handleSlideH = handleSlide.clientHeight;
   const mainSlideContainer = document.querySelector(".js-mainSlide");
   const slideElem = document.querySelectorAll(".js-slide");
-  const cursorInner = document.getElementById("js-cursorInner");
-const cursorOuter = document.getElementById("js-cursorOuter");
   const cursorInnerClass = cursorInner.classList;
   const cursorOuterClass = cursorOuter.classList;
   for (let i = 0; i < slideElem.length; i++) {
     slideElem[i].addEventListener("mouseover", function () {
-      scale = 1;
+      let scale = 1;
       cursorInnerClass.add("is-hov");
       cursorOuterClass.add("is-hov");
       cursorOuter.setAttribute(
@@ -504,16 +407,16 @@ const cursorOuter = document.getElementById("js-cursorOuter");
     isNavigation: true,
     arrows: false,
     pagination: false,
-    drag:true,
+    drag: true,
     easing: "cubic-bezier(1,.01,.17,1)",
     speed: 1000,
     waitForTransition: false,
     breakpoints: {
       768: {
         padding: "20%",
-        arrows:true,
-      }
-    }
+        arrows: true,
+      },
+    },
   }).mount();
 
   let currentSlide = mainSlideContainer.querySelector(".is-active");
@@ -529,20 +432,20 @@ const cursorOuter = document.getElementById("js-cursorOuter");
   const totalNum = document.querySelector(".js-totalNum");
   totalNum.textContent = `0${mainSplide.length}`;
 
-  const slideTtl = document.querySelector('.js-slideTtl');
-  const slideSubTtl = document.querySelector('.js-slideSubTtl');
-  const slideTtlOuter = document.querySelector('.js-ttlOuter');
-  const slideSubTtlOuter = document.querySelector('.js-subTtlOuter');
+  const slideTtl = document.querySelector(".js-slideTtl");
+  const slideSubTtl = document.querySelector(".js-slideSubTtl");
+  const slideTtlOuter = document.querySelector(".js-ttlOuter");
+  const slideSubTtlOuter = document.querySelector(".js-subTtlOuter");
   let slideTtlH = slideTtl.clientHeight;
   let slideSubTtlH = slideSubTtl.clientHeight;
-  slideTtlOuter.setAttribute('style', `height:${slideTtlH}px`);
-  slideSubTtlOuter.setAttribute('style', `height:${slideSubTtlH}px`);
-  
-  window.addEventListener('resize', function () {
+  slideTtlOuter.setAttribute("style", `height:${slideTtlH}px`);
+  slideSubTtlOuter.setAttribute("style", `height:${slideSubTtlH}px`);
+
+  window.addEventListener("resize", function () {
     slideTtlH = slideTtl.clientHeight;
-    slideTtlOuter.setAttribute('style', `height:${slideTtlH}px`);
-  })
-  
+    slideTtlOuter.setAttribute("style", `height:${slideTtlH}px`);
+  });
+
   mainSplide.on("move", function () {
     slideCurrentIndex = mainSplide.index;
     slidePrevIndex = mainSplide.Components.Controller.getIndex(true);
@@ -550,19 +453,18 @@ const cursorOuter = document.getElementById("js-cursorOuter");
     currentSlideItem.setAttribute(
       "style",
       `transform:rotateX(0deg) rotateY(0deg)`
-      );
-      //タイトルをアニメーションさせたい
-    gsap.to('.js-slideTtl', {
+    );
+    //タイトルをアニメーションさせたい
+    gsap.to(".js-slideTtl", {
       y: "100%",
-      ease:"Power4.easeInOut",
-      })
-    gsap.to('.js-slideSubTtl', {
+      ease: "Power4.easeInOut",
+    });
+    gsap.to(".js-slideSubTtl", {
       y: "100%",
-      ease:"Power4.easeInOut",
-      })
+      ease: "Power4.easeInOut",
+    });
   });
 
-  
   mainSplide.on("moved", function () {
     // ttlSplide.Components.Controller.go(slideCurrentIndex);
     // handleSplide.Components.Controller.go(slideCurrentIndex);
@@ -573,18 +475,26 @@ const cursorOuter = document.getElementById("js-cursorOuter");
       "style",
       `transform:rotateX(0deg) rotateY(0deg)`
     );
-    gsap.fromTo(".js-slideTtl", {
-      y:"100%"
-    }, {
-      y: 0,
-      ease:"Power4.easeInOut",
-    })
-    gsap.fromTo(".js-slideSubTtl", {
-      y:"100%"
-    }, {
-      y: 0,
-      ease:"Power4.easeInOut",
-    })
+    gsap.fromTo(
+      ".js-slideTtl",
+      {
+        y: "100%",
+      },
+      {
+        y: 0,
+        ease: "Power4.easeInOut",
+      }
+    );
+    gsap.fromTo(
+      ".js-slideSubTtl",
+      {
+        y: "100%",
+      },
+      {
+        y: 0,
+        ease: "Power4.easeInOut",
+      }
+    );
     getOnMouse();
   });
 
@@ -810,7 +720,7 @@ function textFlow() {
 //------------------------------------------------------------------------------------------------
 //fadeUpAnimation
 const fadeUpCb = function fadeUpAnime(el, isIntersecting) {
-  el.setAttribute('style', `opacity:0;transform:translateY(50px)`);
+  el.setAttribute("style", `opacity:0;transform:translateY(50px)`);
   if (isIntersecting) {
     let timings = {
       easing: "cubic-bezier(.19,.2,.1,.38)",
@@ -819,39 +729,41 @@ const fadeUpCb = function fadeUpAnime(el, isIntersecting) {
     timings.duration = 1300;
     el.animate(
       [
-        { transform: `translateY(30px)`, opacity: 0, },
-        { transform: `translateY(-8px)`, opacity: 1, },
-        { transform: `translateY(0px)`, opacity: 1, },
+        { transform: `translateY(30px)`, opacity: 0 },
+        { transform: `translateY(-8px)`, opacity: 1 },
+        { transform: `translateY(0px)`, opacity: 1 },
       ],
       timings
-      );
-    }
+    );
   }
-  const fadeLtRCb = function fadeUpAnime(el, isIntersecting) {
-    el.setAttribute('style', `opacity:0;transform:translateY(50px)`);
-    if (isIntersecting) {
-      let timings = {
-        easing: "cubic-bezier(.19,.2,.1,.38)",
-        fill: "forwards",
-      };
-      timings.duration = 1300;
-      el.animate(
-        [
-          { transform: `translateX(-30px)`, opacity: 0, },
-          { transform: `translateX(8px)`, opacity: 1, },
-          { transform: `translateX(0px)`, opacity: 1, },
-        ],
-        timings
-        );
-      }
-    }
+};
+const fadeLtRCb = function fadeUpAnime(el, isIntersecting) {
+  el.setAttribute("style", `opacity:0;transform:translateY(50px)`);
+  if (isIntersecting) {
+    let timings = {
+      easing: "cubic-bezier(.19,.2,.1,.38)",
+      fill: "forwards",
+    };
+    timings.duration = 1300;
+    el.animate(
+      [
+        { transform: `translateX(-30px)`, opacity: 0 },
+        { transform: `translateX(8px)`, opacity: 1 },
+        { transform: `translateX(0px)`, opacity: 1 },
+      ],
+      timings
+    );
+  }
+};
 
-    const fadeLtREls = document.querySelectorAll('.js-fadeLtRTarget')
-    const fadeLtrSo = new ScrollObserver(fadeLtREls, fadeLtRCb, "0px 0px -150px 0px");
-    const fadeUpEls = document.querySelectorAll('.js-fadeUpTarget')
+const fadeLtREls = document.querySelectorAll(".js-fadeLtRTarget");
+const fadeLtrSo = new ScrollObserver(
+  fadeLtREls,
+  fadeLtRCb,
+  "0px 0px -150px 0px"
+);
+const fadeUpEls = document.querySelectorAll(".js-fadeUpTarget");
 const fadeUpSo = new ScrollObserver(fadeUpEls, fadeUpCb, "0px 0px -150px 0px");
-    
-
 
 //テキストアニメーション
 const animeStart = innerHeight - 100; //開始位置
@@ -860,7 +772,7 @@ const scrubNum = 1; //アニメーションを指定秒の間実行させる
 function scaleIn() {
   //下から縮小しながら
   const scaleInBtTEls = document.querySelectorAll(".js-scaleInBtT");
-  scaleInBtTEls.forEach(BtTel => {
+  scaleInBtTEls.forEach((BtTel) => {
     gsap.from(BtTel, {
       scrollTrigger: {
         trigger: BtTel,
@@ -873,21 +785,20 @@ function scaleIn() {
       scale: 2,
     });
   });
-  
 
   const scaleInBtTYEls = document.querySelectorAll(".js-scaleInBtTY");
 
-  scaleInBtTYEls.forEach(BtTYel => {
+  scaleInBtTYEls.forEach((BtTYel) => {
     gsap.from(BtTYel, {
       scrollTrigger: {
-        trigger:BtTYel,
+        trigger: BtTYel,
         start: `top ${animeStart}px`,
         end: `top ${animeEnd}px`,
         scrub: scrubNum,
       },
-      y:150,
-      scaleY:1.5,
+      y: 150,
+      scaleY: 1.5,
       opacity: 0,
-    })
-  })
+    });
+  });
 }

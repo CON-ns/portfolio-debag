@@ -41,7 +41,7 @@
   </head>
   <body>
     <div data-barba="wrapper">
-      <div class="js-transition">
+      <div class="js-transition u-font__base">
         <div class="inner">
           <p class="js-loadText1">Yuuki Kon</p>
           <p class="js-loadText2">Portfolio.</p>
@@ -49,7 +49,7 @@
         <canvas id="js-transitionCanvas"></canvas>
       </div>
     <div class="container" data-barba="container" data-barba-namespace="profile">
-    <header class="l-header u-font__muli">
+    <header class="l-header u-font__base">
       <h1 class="l-header__ttl js-stickOuterTop">
         <a href="index.html" class="stickTarget">Yuuki Kon</a>
       </h1>
@@ -71,9 +71,9 @@
 
     <main class="p-profile-main">
       <div class="p-profile-main__img">
-        <img class="js-disImg" src="./assets/images/about.jpeg" alt="" />
+        <img class="js-disImg" src="./assets/images/me.webp" alt="" />
       </div>
-      <div class="p-profile-main__inner u-font__muli">
+      <div class="p-profile-main__inner u-font__base">
         <p class="p-profile-main__txt js-fadeUpTarget">My name is Yuuki Kon.</p>
         <p class="p-profile-main__txt js-fadeUpTarget">
           I was born in Aomori in 1995. And now I am a web coder based in Nagasaki. I work as a nurse and have a coding job on the side. In March 2023, I plan to retire from my job as a nurse and make
@@ -99,17 +99,27 @@
       </a>
     </section>
 
-    <section class="p-contact js-contactSec u-font__eloquent">
-      <h2 class="p-contact__ttl js-scaleInBtTY">Contact</h2>
-      <div class="js-stickOuter">
-        <a class="stickTarget" href="">jiny5019@gmail.com</a>
+    <section class="p-contact js-contactSec">
+      <h2 class="p-contact__ttl js-scaleInBtTY u-font__main--bold">
+        Contact
+      </h2>
+      <div class="js-stickOuter u-font__main">
+        <a class="stickTarget" href=""
+          >Jiny5019@gmail.com</a
+        >
       </div>
-      <div class="js-stickOuter">
-        <a class="stickTarget" href="">Twitter</a>
+      <div class="js-stickOuter u-font__main">
+        <a class="stickTarget" href=""
+          >Twitter</a
+        >
       </div>
-      <h2 class="p-contact__ttl js-scaleInBtTY">Articles</h2>
-      <div class="js-stickOuter">
-        <a class="stickTarget" href="">Zenn</a>
+      <h2 class="p-contact__ttl js-scaleInBtTY u-font__main--bold">
+        Articles
+      </h2>
+      <div class="js-stickOuter u-font__main">
+        <a class="stickTarget" href=""
+          >Zenn</a
+        >
       </div>
     </section>
 
@@ -127,7 +137,6 @@
     </div>
     <div class="cursorInner" id="js-cursorInner" aria-hidden="true">
     </div>
-    <div class="noise"></div>
 
     <div class="background--custom">
       <canvas id="canvas-bg"></canvas>

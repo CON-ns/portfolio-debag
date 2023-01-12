@@ -10,10 +10,6 @@ import { SplitTextAnimation } from "./_class.js";
 import { SplitText } from "./_class.js";
 import { StickAnime } from "./_class.js";
 
-
-
-const winH = innerHeight;
-const winW = innerWidth;
 let scrollY; //スクロール量格納用
 
 window.addEventListener('DOMContentLoaded', function () {

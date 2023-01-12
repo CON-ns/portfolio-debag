@@ -438,7 +438,7 @@ function addObject() {
     uniforms: {
       time: { value: 0 },
       uDisplacement: { value: null },
-      uTexture: { value: new THREE.TextureLoader().load("assets/images/profile-mv.png") },//背景画像を設定
+      uTexture: { value: new THREE.TextureLoader().load("assets/images/profile-mv.webp") },//背景画像を設定
     },
     vertexShader: document.getElementById("v-shader").textContent,
     fragmentShader: document.getElementById("f-shader").textContent,
