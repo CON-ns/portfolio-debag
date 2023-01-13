@@ -76,6 +76,7 @@ barba.init({
       },
       afterLeave(data) {
         midAnimation();
+        window.scroll({top:0,behavior:"smooth"})
       },
       async beforeEnter(data) {
         await delay(1500);
