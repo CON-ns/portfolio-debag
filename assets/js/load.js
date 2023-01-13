@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 
 
-
 const loader = document.querySelector('.js-loader');
 const body = document.querySelector('.is-home');
 

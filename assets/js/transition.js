@@ -75,17 +75,17 @@ barba.init({
       },
       async beforeEnter(data) {
         await delay(1500);
-        window.location.reload();
+        // window.location.reload();
       },
       async enter(data) {
         enterAnimation();
         await delay(1500);
-        // const container = document.querySelector('.container');
-        // gsap.to(container, {
-        //   opacity: 1,
-        //   duration: 1,
-        //   ease: 'Quart.easeOut'
-        // })
+        const container = document.querySelector('.container');
+        gsap.to(container, {
+          opacity: 1,
+          duration: 1,
+          ease: 'Quart.easeOut'
+        })
       }
     }
   ]

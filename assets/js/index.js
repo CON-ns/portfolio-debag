@@ -12,6 +12,7 @@ let scrollY; //スクロール量格納用
 let mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 
 window.addEventListener("DOMContentLoaded", function () {
+  mvAnime();
   fvParallax();
   mediaQueryFunc();
   aboutAnime();
@@ -19,6 +20,57 @@ window.addEventListener("DOMContentLoaded", function () {
   textFlow();
   scaleIn();
 });
+
+function mvAnime() {
+  const grid = document.querySelector('.c-grid');
+  grid.setAttribute('style', "transform-origin:top;");
+  gsap.set(".js-parallax", {
+    opacity: 0,
+    y: 50
+  });
+  const mvTl = gsap.timeline();
+  mvTl.fromTo(grid, {
+    scaleY: 0,
+  }, {
+    scaleY: 1,
+    duration: 2,
+    ease: "Power4.easeInOut",
+  });
+  mvTl.to('.js-parallax',{
+    y: 0,
+    opacity: 1,
+    duration: 1,
+    ease: "Power4.easeInOut",
+  },"-=0.7")
+  mvTl.fromTo('.p-aboutImg', {
+    opacity: 0,
+    skewY:20,
+  }, {
+    skewY:0,
+    delay:-0.8,
+    opacity:0.5,
+    duration: 1.3,
+    ease: "Power4.easeInOut",
+  }, "-=0")
+  mvTl.fromTo(".l-header", {
+    x: -30,
+    opacity:0,
+  }, {
+    x: 0,
+    opacity:1,
+    duration: 3,
+    ease: "Power4.easeInOut",
+  },"-=1")
+  mvTl.fromTo(".l-globalNav", {
+    y: -30,
+    opacity:0,
+  }, {
+    y: 0,
+    opacity:1,
+    duration: 3,
+    ease: "Power4.easeInOut",
+  },"<")
+}
 //----------------------------------------------------------------
 //マウスストーカー
 let cursorX, cursorY;
@@ -334,40 +386,42 @@ const st = new SplitText(
 //----------------------------------------------------------------
 //FVのテキストをパララックスさせる
 function fvParallax() {
-  const parallaxEls = document.querySelectorAll(".js-parallax");
-  // let scrollY;
+  let scrollY;
   const gsnInstance = new GetScrollNum();
+  window.addEventListener('scroll', function () {
+    gsnInstance.getResult();
+    scrollY = gsnInstance.scrollY;
+  })
+  
+  const parallaxEls = document.querySelectorAll(".js-parallax");
   const fvCb = function (el, isIntersecting) {
     if (isIntersecting) {
       window.addEventListener(
         "scroll",
         function () {
-          gsnInstance.getResult();
-          scrollY = gsnInstance.scrollY;
           el.style.transform = `translateY(${scrollY * 0.5}px)`;
         },
         { passive: true }
       );
     }
   };
-  const fvSO = new ScrollObserver(parallaxEls, fvCb, "0px", { once: false });
-
-  gsap.to(".js-splitPart", {
-    scrollTrigger: {
-      trigger: ".js-parallax",
-      start: "0px",
-      scrub: true,
-      delay: 0.4,
-      ease: "power1.inOut",
-    },
-    y: -170,
-    opacity: 0,
-    stagger: {
-      from: "start",
-      amount: "1",
-    },
-  });
+  const fvSO = new ScrollObserver(parallaxEls,fvCb, "100px", { once: false });
 }
+gsap.to(".js-splitPart", {
+  scrollTrigger: {
+    trigger: ".js-parallax",
+    start: "0px",
+    scrub: true,
+    delay: 0.4,
+    ease: "power1.inOut",
+  },
+  y: -170,
+  opacity: 0,
+  stagger: {
+    from: "start",
+    amount: "1",
+  },
+});
 //----------------------------------------------------------------
 //worksのスライダーカスタマイズ
 
@@ -376,6 +430,27 @@ function worksSlide() {
   const slideElem = document.querySelectorAll(".js-slide");
   const cursorInnerClass = cursorInner.classList;
   const cursorOuterClass = cursorOuter.classList;
+
+  const worksCb = function (el, isIntersecting) {
+    gsap.set(el, {
+      x: 30,
+      opacity: 0
+    });
+    if (isIntersecting) {
+      gsap.fromTo(el, {
+        x: 30,
+        opacity:0
+      }, {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: "Power4.easeInOut",
+      })
+    }
+  }
+
+  const worksSo = new ScrollObserver(document.querySelectorAll('.js-worksSec'), worksCb, "-100px");
+
   for (let i = 0; i < slideElem.length; i++) {
     slideElem[i].addEventListener("mouseover", function () {
       let scale = 1;
@@ -466,8 +541,6 @@ function worksSlide() {
   });
 
   mainSplide.on("moved", function () {
-    // ttlSplide.Components.Controller.go(slideCurrentIndex);
-    // handleSplide.Components.Controller.go(slideCurrentIndex);
     currentNum.textContent = `0${mainSplide.index + 1}`;
     currentNum2.textContent = `0${mainSplide.index + 1}`;
     currentSlide = mainSlideContainer.querySelector(".is-active");
@@ -632,92 +705,7 @@ function textFlow() {
   flowing();
 }
 
-//---------------------------------------------------------------
-//three.js
-
-// let text;
-// const canvas = document.getElementById('textCanvas');
-// // Scene
-// const scene = new THREE.Scene();
-
-// const sizes = {
-//   width: window.innerWidth /3 * 2,
-//   height: window.innerHeight / 3,
-// };
-
-// //camera
-// const camera = new THREE.PerspectiveCamera(
-//   75,
-//   sizes.width / sizes.height,
-//   0.1,
-//   100
-// );
-// camera.position.set(0, 0, 1.7);
-// scene.add(camera);
-
-// //Fonts
-// const fontLoader = new FontLoader();
-// fontLoader.load("./fonts/Lobster_Regular.json", (font) => {
-//   const textGeometry = new TextGeometry("Playground", {
-//     font: font,
-//     size: 0.4,
-//     height: 0.3,
-//     curveSegments: 5,
-//     bevelEnabled: true,
-//     bevelThickness: 0.001,
-//     bevelSize: 0.001,
-//     bevelOffset: 0,
-//     bevelSegments: 1,
-//   });
-//   textGeometry.center();
-
-//   const textMaterial = new THREE.MeshNormalMaterial();
-//   text = new THREE.Mesh(textGeometry, textMaterial);
-//   scene.add(text);
-// });
-
-// // Renderer
-// const renderer = new THREE.WebGLRenderer({
-//   canvas:canvas,
-//   alpha:true
-// });
-// renderer.setSize(sizes.width, sizes.height);
-// renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-// renderer.setClearColor(0x000000, 0);
-
-// // Animate
-// let rotateX = 0;
-// const animate = () => {
-//   renderer.render(scene, camera);
-//   if (text !== undefined && scrollDir === "down") {
-//     rotateX += 0.005;
-//     text.rotation.x += 0.005;
-//   } else if (text !== undefined && scrollDir === "up") {
-//     rotateX -= 0.005;
-//     text.rotation.x -= 0.005;
-//   }
-//   window.requestAnimationFrame(animate);
-// };
-
-// window.addEventListener('scroll', function (e) {
-//   scrollY = window.pageYOffset;
-//   text.rotation.x = rotateX + scrollY * 0.003;
-// })
-
-// window.addEventListener("resize", () => {
-//   // Update sizes
-//   sizes.width = window.innerWidth / 2;
-//   sizes.height = window.innerHeight / 3;
-
-//   // Update camera
-//   camera.aspect = sizes.width / sizes.height;
-//   camera.updateProjectionMatrix();
-
-//   // Update renderer
-//   renderer.setSize(sizes.width, sizes.height);
-//   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-// });
-//------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------
 //fadeUpAnimation
 const fadeUpCb = function fadeUpAnime(el, isIntersecting) {
   el.setAttribute("style", `opacity:0;transform:translateY(50px)`);

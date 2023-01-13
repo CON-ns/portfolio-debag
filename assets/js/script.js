@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import { FontLoader } from "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
-// import fragment from "../shader/fragment.glsl";
-// import vertex from "../shader/vertex.glsl";
 import { GetScrollNum } from "./_class.js";
 import { ScrollFunction } from "./_class.js";
 import { ScrollObserver } from "./_class.js";
@@ -166,19 +164,16 @@ function playgroundLink() {
 const canvas = document.getElementById('js-playgroundCanvas');
 // Scene
   const scene = new THREE.Scene();
-  
   if (!canvas) return;
-
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight / 3,
 }
-
 const camera = new THREE.PerspectiveCamera(
   70,
   sizes.width / sizes.height,
   0.001,
-  1000
+  10000
 );
 if (mediaFlag === "pcL" || mediaFlag === "pc") {
   camera.position.set(0, 0, 0.5);
@@ -186,7 +181,6 @@ if (mediaFlag === "pcL" || mediaFlag === "pc") {
   camera.position.set(0, 0, 0.6);
 }
 scene.add(camera);
-
 canvas.addEventListener('mouseover', function () {
   gsap.to(camera.position, {
     z: 0.45,
@@ -196,7 +190,6 @@ canvas.addEventListener('mouseover', function () {
     }
   })
 });
-
 canvas.addEventListener('mouseout', function () {
   gsap.to(camera.position, {
     z: 0.5,
@@ -207,37 +200,30 @@ canvas.addEventListener('mouseout', function () {
   })
 });
 
-
 //Fonts
 const fontLoader = new FontLoader();
-fontLoader.load("assets/fonts/Lobster_Regular.json", (font) => {
+// fontLoader.load("assets/fonts/droid/droid_sans_bold.typeface.json", (font) => {
+fontLoader.load("assets/fonts/optimer_regular.typeface.json", (font) => {
   const textGeometry = new TextGeometry("PLAYGROUND", {
     font: font,
-    size: 0.05,
+    size: 0.07,
     height: 0.01,
-    curveSegments: 5,
+    curveSegments: 20,
     bevelEnabled: true,
     bevelThickness: 0.0001,
-    bevelSize: 0.001,
+    bevelSize: 0.000001,
     bevelOffset: 0,
     bevelSegments: 10,
     letterSpacing: 200
   });
   textGeometry.center();
 
-  const textMaterial = new THREE.MeshMatcapMaterial({
-    depthTest:true,
-    depthWrite:true,
-    color:0xd9c4b1,
-  });
+  const textMaterial = new THREE.MeshNormalMaterial();
   text = new THREE.Mesh(textGeometry, textMaterial);
   text.position.set(0, 0, 0.3);
-  text.rotation.z = (Math.PI / 2) / 15;
+  text.rotation.z = (Math.PI / 2) / 10;
   scene.add(text);
-  
 });
-
-
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -281,210 +267,3 @@ window.addEventListener("resize", () => {
 animate();
 }
 
-//-------------------------------------------------------------------------------
-//宇宙
-function lerp(a, b, t) {
-  return a * (1 - t) + b*t;
-}
-
-class Sketch{
-  constructor(options) {
-    this.scene = scene;
-    this.container = options.dom;
-    this.width = sizes.width;
-    this.height = sizes.height;
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.container,
-      antialias:true,
-    });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0x000000,0);
-    this.renderer.physicallyCorrectLights = true;
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
-
-    this.raycaster = new THREE.Raycaster();
-    this.pointer = new THREE.Vector2();
-    this.point = new THREE.Vector3();
-
-    this.camera = new THREE.PerspectiveCamera(
-      70,
-      window.innerWidth / window.innerHeight,
-      0.001,
-      1000
-    );
-
-    this.camera.position.set(0, 0.2, 0.5);
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.time = 0;
-
-    this.materials = [];
-
-    this.isPlaying = true;
-
-    let opts = [
-      {
-      min_radius:0.3,
-      max_radius: 1.5,
-      color: '#F29979',
-        size: 0.3,
-      amp:1
-      },
-      {
-      min_radius:0.3,
-      max_radius: 1.6,
-      color: '#CABFD9',
-        size: 0.4,
-      amp:3
-      },
-      {
-      min_radius:0.3,
-      max_radius: 1.6,
-      color: '#0C0F40',
-        size: 0.2,
-      amp:3
-      },
-      {
-      min_radius:0.3,
-      max_radius: 1.6,
-      color: '#646E8C',
-        size: 0.4,
-      amp:3
-      },
-      {
-      min_radius:0.3,
-      max_radius: 1.6,
-      color: '#ECF2DF',
-        size: 0.3,
-      amp:3
-      },
-    ]
-
-    opts.forEach(op => {
-      this.addObject(op);
-    });
-    this.pointer = [];
-    this.resize();
-    this.render();
-    this.setupResize();
-  }
-
-  raycasterEvent() {
-
-    let mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(10, 10,10,10).rotateX(-Math.PI/2),
-      new THREE.MeshBasicMaterial({ color: 0xff0000,wireframe:true })
-    )
-
-    let test = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1,10,10),
-      new THREE.MeshBasicMaterial({ color: 0xff0000,wireframe:true })
-    )
-
-    this.scene.add(test);
-
-    window.addEventListener('pointermove', (event)=>{
-      this.pointer.x = (event.clientX / this.width) * 2 - 1;
-      this.pointer.y = -(event.clientY / this.height) * 2 + 1;
-      
-      this.raycaster.setFromCamera(this.pointer, this.camera);
-
-      const intersects = this.raycaster.intersectObjects([mesh]);
-
-      if (intersects[0]) {
-        test.position.copy(intersects[0].point);
-        this.point.copy(intersects[0].point);
-      }
-    })
-  }
-
-  settings() {
-    let that = this;
-    this.settings = {
-      progress: 0,
-    }
-    this.gui = new GUI();
-    this.gui.add(this.settings, "progress", 0, 1, 0.01);
-  }
-
-  setupResize() {
-    window.addEventListener("resize", this.resize.bind(this));
-  }
-
-  resize() {
-    this.width = this.container.offsetWidth;
-    this.height = this.container.offsetHeight;
-    this.renderer.setSize(this.width, this.height);
-    this.camera.aspect = this.width / this.height;
-
-    this.camera.updateProjectionMatrix();
-  }
-
-  addObject(opts) {
-    let that = this;
-    let count = 1000;
-    let min_radius = opts.min_radius;//円の内側の半径
-    let max_radius =opts.max_radius;//円の外側の半径
-    let particlegeo = new THREE.PlaneGeometry(1, 1);
-    let geo = new THREE.InstancedBufferGeometry();
-    geo.instanceCount = count;
-    geo.setAttribute('position', particlegeo.getAttribute('position'));
-    geo.index = particlegeo.index;
-
-    let pos = new Float32Array(count * 3);
-
-    for (let i = 0; i < count; i++) {
-      let theta = Math.random() * 2 * Math.PI;
-      let r = lerp(min_radius, max_radius, Math.random());
-      let x = r*Math.sin(theta);
-      let y = (Math.random()-0.5)*0.1;
-      let z = r*Math.cos(theta);
-      pos.set([
-        x,y,z
-      ],i*3)
-    }
-
-    geo.setAttribute('pos', new THREE.InstancedBufferAttribute(pos, 3,false));
-
-    let material = new THREE.ShaderMaterial({
-      extensions: {
-        derivatives: "#extension GL_OES_standard_derivatives : enable",
-      },
-      side: THREE.DoubleSide,
-      uniforms: {
-        uTexture: { value: new THREE.TextureLoader().load(particleTexture) },
-        time: { value: 0 },
-        uAmp: { value:opts.amp },
-        uMouse: { value:new THREE.Vector3() },
-        size: { value: opts.size },
-        uColor:{value:new THREE.Color(opts.color)},
-        resolution: { value: new THREE.Vector4() }
-      },
-      transparent: true,
-      depthTest: false,
-      vertexShader:vertex,
-      fragmentShader:fragment
-    });
-    this.materials.push(material);
-
-    this.geometry = new THREE.PlaneGeometry(1,1);
-
-    this.points = new THREE.Mesh(geo,material);
-    this.scene.add(this.points);
-  }
-
-  render() {
-    if (!this.isPlaying) return;
-    this.time += 0.05;
-    this.materials.forEach(m => {
-      m.uniforms.time.value = this.time*0.3;
-      m.uniforms.uMouse.value = this.point;
-    })
-    requestAnimationFrame(this.render.bind(this));
-    this.renderer.render(this.scene, this.camera);
-  }
-}
-
-// const mv = new Sketch({
-//   dom: document.getElementById('js-playground')
-// });

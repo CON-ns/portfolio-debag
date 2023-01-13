@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 //スクロール量、率、正規化した値を取得するクラス
 export class GetScrollNum {
