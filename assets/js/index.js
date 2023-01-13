@@ -11,8 +11,117 @@ const winW = innerWidth;
 let scrollY; //スクロール量格納用
 let mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 
-window.addEventListener("DOMContentLoaded", function () {
+
+const loader = document.querySelector('.js-loader');
+const container = document.querySelector(".container");
+const body = document.querySelector('.is-home');
+
+// //-----------------------------------------------------------------------
+// //拡大禁止
+// document.body.addEventListener('touchmove', (e) => {
+//   if (e.touches.length > 1) {
+//     e.preventDefault();
+//   }
+// }, {passive: false});
+
+// document.body?.addEventListener(
+//   "wheel",
+//   (e) => {
+//     e.preventDefault();
+//   },
+//   { passive: false }
+//   );
+//----------------------------------------------------------------
+
+function loadPage() {
+  loader.classList.add('is-loaded');
+  container.classList.add('is-loaded');
+}
+
+if (!sessionStorage.getItem('visited')) {
+  init();
+  sessionStorage.setItem('visited', 'first');
+  window.addEventListener('load', function () {
+    gsap.set(".js-parallax", {
+      opacity: 0,
+      y: 50
+    });
+    gsap.set('.p-aboutImg', {
+      opacity: 0,
+      skewY: 20,
+    });
+    gsap.set(".l-header", {
+      x: -30,
+      opacity: 0,
+    });
+    gsap.set(".l-globalNav", {
+      y: -30,
+      opacity:0,
+    })
+    setTimeout(loadPage, 4200);
+    setTimeout(mvAnime, 4250);
+});
+} else if(sessionStorage.getItem('visited')){
+  loadPage();
   mvAnime();
+}
+
+async function init() {
+  console.log("ローディングアニメだよ");
+  const renderer = new THREE.WebGLRenderer({ 
+    antialias: true,
+    alpha:true,
+  });
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xffffff,0);
+  loader.appendChild(renderer.domElement);
+  renderer.domElement.classList.add('loader-canvas');
+  const canvas = document.querySelector('.loader-canvas');
+  const canvasW = canvas.clientWidth;
+  const canvasH = canvas.clientHeight;
+  
+  const scene = new THREE.Scene();
+  const fov = 60;
+  
+  const fovRad = (fov / 2) * (Math.PI / 180);
+  const dist = canvasW / 2 / Math.tan(fovRad);
+  const camera = new THREE.PerspectiveCamera(
+    fov,
+    canvasW / canvasH,
+    0.1,
+    10000
+    );
+    camera.position.z = dist;
+    
+    const geometry = new THREE.PlaneGeometry(canvasW * 2,canvasH * 2);
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTick: { value: 0 },
+      },
+      vertexShader:document.getElementById('v-shader-loading').textContent,
+      fragmentShader:document.getElementById('f-shader-loading').textContent,
+      transparent: true,
+    });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+  
+  let previousTime = 0;
+  let elapsed,id;
+  function animate() {
+    const currentTime = performance.now();
+    elapsed = ((currentTime - previousTime) / 1000).toFixed(2);
+    id= requestAnimationFrame(animate);
+    material.uniforms.uTick.value = elapsed;
+    renderer.render(scene, camera);
+  }
+  animate();
+  setTimeout(() => {
+    cancelAnimationFrame(id);
+  },10000)
+}
+
+window.addEventListener("DOMContentLoaded", function () {
   fvParallax();
   mediaQueryFunc();
   aboutAnime();
@@ -24,10 +133,6 @@ window.addEventListener("DOMContentLoaded", function () {
 function mvAnime() {
   const grid = document.querySelector('.c-grid');
   grid.setAttribute('style', "transform-origin:top;");
-  gsap.set(".js-parallax", {
-    opacity: 0,
-    y: 50
-  });
   const mvTl = gsap.timeline();
   mvTl.fromTo(grid, {
     scaleY: 0,
@@ -36,12 +141,15 @@ function mvAnime() {
     duration: 2,
     ease: "Power4.easeInOut",
   });
-  mvTl.to('.js-parallax',{
+  mvTl.fromTo('.js-parallax', {
+    opacity: 0,
+    y: 50
+  },{
     y: 0,
     opacity: 1,
     duration: 1,
     ease: "Power4.easeInOut",
-  },"-=0.7")
+  }, "-=0.7");
   mvTl.fromTo('.p-aboutImg', {
     opacity: 0,
     skewY:20,
@@ -489,7 +597,6 @@ function worksSlide() {
     breakpoints: {
       768: {
         padding: "20%",
-        arrows: true,
       },
     },
   }).mount();

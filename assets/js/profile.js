@@ -14,6 +14,7 @@ const canvasEls = document.querySelectorAll('.js-mvCanvas');
 
 window.addEventListener('DOMContentLoaded', function () {
   mediaQueryFunc();
+  mvAnime();
   if (mediaFlag === "pcL" || mediaFlag === "pc") {
     mvRipple();
   } else if (mediaFlag === "tablet" || mediaFlag === "mobile") {
@@ -22,6 +23,20 @@ window.addEventListener('DOMContentLoaded', function () {
   meImg();
   scaleIn()
 })
+
+//------------------------------------------------------------------------------
+//mvアニメーション
+function mvAnime() {
+  gsap.fromTo('.p-profile-mv', {
+    opacity: 0,
+    y:15
+  }, {
+    opacity: 1,
+    y: 0,
+    duration: 2.5,
+    ease: "Power4.easeInOut",
+  })
+}
 
 
 //----------------------------------------------------------------

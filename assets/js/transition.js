@@ -75,7 +75,7 @@ barba.init({
       },
       async beforeEnter(data) {
         await delay(1500);
-        // window.location.reload();
+        window.location.reload();
       },
       async enter(data) {
         enterAnimation();
