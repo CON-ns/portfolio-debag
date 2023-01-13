@@ -4,6 +4,7 @@ const loadCanvas = document.getElementById('js-transitionCanvas');
 const loader = document.querySelector('.js-transition');
 const loadText1 = document.querySelector('.js-loadText1');
 const loadText2 = document.querySelector('.js-loadText2');
+const container = document.querySelector('.container')
 
 
 let camera, scene, renderer, geometry, material,cancelId;
@@ -63,7 +64,10 @@ barba.init({
   sync:true,
   transitions: [
     {
-      async leave (data) {
+      async leave(data) {
+        if (container.classList.contains('is-loaded')) {
+          container.classList.remove('is-loaded');
+        }
         const done = this.async();
         leaveAnimation();
         pageTransition();
@@ -79,13 +83,9 @@ barba.init({
       },
       async enter(data) {
         enterAnimation();
-        await delay(1500);
-        const container = document.querySelector('.container');
-        gsap.to(container, {
-          opacity: 1,
-          duration: 1,
-          ease: 'Quart.easeOut'
-        })
+        if (container.classList.contains('is-loaded')) {
+          container.classList.add('is-loaded');
+        }
       }
     }
   ]
@@ -148,6 +148,9 @@ async function enterAnimation() {
     ease: 'Quart.easeOut'
   });
   await delay(1000);
+  const container = document.querySelector('.container');
+  console.log(container);
+  container.classList.add('is-loaded');
   cancelAnimationFrame(cancelId);
 }
 

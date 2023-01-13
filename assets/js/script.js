@@ -178,7 +178,7 @@ const camera = new THREE.PerspectiveCamera(
 if (mediaFlag === "pcL" || mediaFlag === "pc") {
   camera.position.set(0, 0, 0.5);
 } else {
-  camera.position.set(0, 0, 0.6);
+  camera.position.set(0, 0, 0.7);
 }
 scene.add(camera);
 canvas.addEventListener('mouseover', function () {

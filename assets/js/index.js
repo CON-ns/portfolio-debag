@@ -4,7 +4,6 @@ import { ScrollFunction } from "./_class.js";
 import { ScrollObserver } from "./_class.js";
 import { SplitTextAnimation } from "./_class.js";
 import { SplitText } from "./_class.js";
-import { StickAnime } from "./_class.js";
 
 const winH = innerHeight;
 const winW = innerWidth;
@@ -14,7 +13,6 @@ let mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディア�
 
 const loader = document.querySelector('.js-loader');
 const container = document.querySelector(".container");
-const body = document.querySelector('.is-home');
 
 // //-----------------------------------------------------------------------
 // //拡大禁止
@@ -41,7 +39,7 @@ function loadPage() {
 if (!sessionStorage.getItem('visited')) {
   init();
   sessionStorage.setItem('visited', 'first');
-  window.addEventListener('load', function () {
+  window.addEventListener('DOMContentLoaded', function () {
     gsap.set(".js-parallax", {
       opacity: 0,
       y: 50
@@ -63,11 +61,28 @@ if (!sessionStorage.getItem('visited')) {
 });
 } else if(sessionStorage.getItem('visited')){
   loadPage();
-  mvAnime();
+  window.addEventListener('DOMContentLoaded', function () {
+    gsap.set(".js-parallax", {
+      opacity: 0,
+      y: 50
+    });
+    gsap.set('.p-aboutImg', {
+      opacity: 0,
+      skewY: 20,
+    });
+    gsap.set(".l-header", {
+      x: -30,
+      opacity: 0,
+    });
+    gsap.set(".l-globalNav", {
+      y: -30,
+      opacity:0,
+    })
+    setTimeout(mvAnime, 100);
+});
 }
 
 async function init() {
-  console.log("ローディングアニメだよ");
   const renderer = new THREE.WebGLRenderer({ 
     antialias: true,
     alpha:true,
@@ -155,11 +170,10 @@ function mvAnime() {
     skewY:20,
   }, {
     skewY:0,
-    delay:-0.8,
     opacity:0.5,
     duration: 1.3,
     ease: "Power4.easeInOut",
-  }, "-=0")
+  }, "-=0.8")
   mvTl.fromTo(".l-header", {
     x: -30,
     opacity:0,

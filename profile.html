@@ -1,43 +1,28 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="format-detection" content="telephone=no" />
-    <title></title>
-    <meta name="description" content="" />
-
-    <!-- favicon/webclipicon -->
-    <!-- <link rel="icon" href="favicon.ico" /> -->
-    <!-- <link rel="icon" href="favicon.svg" type="image/">
-    <link rel="apple-touch-icon" href="webclip.png" /> -->
-
-    <!-- ogp -->
-    <meta property="og:site_name" content="サイト名" />
-    <meta property="og:url" content="URL" />
-    <meta property="og:type" content="website or article" />
-    <meta property="og:title" content="ページのタイトル" />
-    <meta property="og:description" content="ページの説明" />
-    <meta property="og:image" content="URL" />
-    <meta property="og:locale" content="ja_JP" />
-    <!-- <meta property="fb:app_id" content="AppID"> -->
-    <meta name="twitter:card" content="summary_large_image or summary" />
-    <!-- <meta name="twitter:site" content="" /> -->
-    <meta name="twitter:description" content="ページの説明" />
-    <meta name="twitter:image:src" content="URL" />
-
-    <!-- css -->
-    <link rel="stylesheet" href="./assets/css/style.css" />
-
-   <!-- フォントの読み込み -->
-    <!-- EloquentJFPro -->
-    <link rel="stylesheet" href="https://use.typekit.net/xsr1ckp.css" />
-    <!-- operetta -->
-    <link rel="stylesheet" href="https://use.typekit.net/zwj5uog.css" />
-    <!-- niveau -->
-    <link rel="stylesheet" href="https://use.typekit.net/dvz5poh.css" />
-    <!-- bluemlein -->
-    <link rel="stylesheet" href="https://use.typekit.net/djw4djt.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuuki Kon</title>
+    <link rel="canonical" href="https://yuuki-kon.vercel.app/">
+    <meta name="description" content="This site is the portfolio of Yuuki Kon.">
+    <meta property="og:site_name" content="Yuuki Kon:Portfolio">
+    <meta property="og:url" content="https://yuuki-kon.vercel.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Yuuki Kon">
+    <meta property="og:description" content="Web corder">
+    <meta property="og:image" content="https://yuuki-kon.vercel.app/assets/images/share.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://use.typekit.net/xsr1ckp.css">
+    <link rel="stylesheet" href="https://use.typekit.net/zwj5uog.css">
+    <link rel="stylesheet" href="https://use.typekit.net/dvz5poh.css">
+    <link rel="stylesheet" href="https://use.typekit.net/djw4djt.css">
+    <link rel="icon" href="./assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="./assets/images/favicon.png">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <script
       async
       src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"
@@ -69,7 +54,7 @@
       <h2 class="l-header__sectionTtl">00. Profile</h2>
     </header>
 
-    <section class="p-profile-mv" id="js-mv">
+    <section class="p-profile-mv" id="js-mv" aria-hidden="true">
       <div class="p-profile-mv__inner u-font__main--bold">
         <span class="p-profile-mv__p js-blotter" data-blotter-m>P</span>
         <span class="p-profile-mv__r js-blotter" data-blotter-s>R</span>
@@ -84,7 +69,7 @@
 
     <main class="p-profile-main">
       <div class="p-profile-main__img">
-        <img class="js-disImg" src="./assets/images/me.webp" alt="" />
+        <img class="js-disImg" src="./assets/images/me.webp" alt="photo:Yuuki Kon">
       </div>
       <div class="p-profile-main__inner u-font__base">
         <p class="p-profile-main__txt js-fadeUpTarget">My name is Yuuki Kon.</p>
@@ -107,8 +92,9 @@
     </main>
 
     <section class="p-playgroundLink">
-      <canvas id="js-playgroundCanvas"></canvas>
       <a href="playground.html">
+        <span class="visually-hidden">playground</span>
+        <canvas id="js-playgroundCanvas"></canvas>
       </a>
     </section>
 
@@ -117,12 +103,12 @@
         Contact
       </h2>
       <div class="js-stickOuter u-font__main">
-        <a class="stickTarget" href=""
+        <a class="stickTarget" href="mailto:jiny5019@gmail.com" target="_blank"
           >Jiny5019@gmail.com</a
         >
       </div>
       <div class="js-stickOuter u-font__main">
-        <a class="stickTarget" href=""
+        <a class="stickTarget" href="https://twitter.com/dochibi_corder" target="_blank"
           >Twitter</a
         >
       </div>
@@ -130,7 +116,7 @@
         Articles
       </h2>
       <div class="js-stickOuter u-font__main">
-        <a class="stickTarget" href=""
+        <a class="stickTarget" href="https://zenn.dev/con_ns_pgm"
           >Zenn</a
         >
       </div>
