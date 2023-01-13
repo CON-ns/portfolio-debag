@@ -5,6 +5,40 @@ import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geome
 let mediaQueryPCLarge, mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 let canvasHeight = innerHeight;
 
+window.addEventListener('DOMContentLoaded', function () {
+  gsap.set('.p-playground__item', {
+    opacity: 0,
+    y: 20
+  });
+  mvAnime();
+})
+
+function mvAnime() {
+  const tl = gsap.timeline();
+  tl.fromTo('.p-playground__item', {
+    y: 30,
+    opacity: 0
+  }, {
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    ease: "Power4.easeInOut",
+    stagger: {
+      from: "start",
+      amount: "0.6",
+    },
+  });
+  tl.fromTo(".l-globalNav", {
+    y: -30,
+    opacity:0,
+  }, {
+    y: 0,
+    opacity:1,
+    duration: 3,
+    ease: "Power4.easeInOut",
+  },"-=1")
+}
+
 mediaQueryFunc();
 secFunc();
 

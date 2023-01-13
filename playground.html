@@ -38,6 +38,19 @@
     <link rel="stylesheet" href="https://use.typekit.net/dvz5poh.css" />
     <!-- bluemlein -->
     <link rel="stylesheet" href="https://use.typekit.net/djw4djt.css" />
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+          "FontLoader": "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js",
+          "TextGeometry": "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js"
+        }
+      }
+    </script>
   </head>
   <body class="is-playground">
     <div data-barba="wrapper">
@@ -799,19 +812,7 @@ void main() {
         }
     </script>
 
-    <script
-      async
-      src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"
-    ></script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
-          "FontLoader": "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js",
-          "TextGeometry": "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js"
-        }
-      }
-    </script>
+    
     <script src="https://unpkg.com/@barba/core"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/greentfrapp/pocoloco@minigl/minigl.js"></script>
