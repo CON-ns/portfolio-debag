@@ -1,4 +1,4 @@
-import * as THREE from 'https://unpkg.com/three@0.148.0/';
+import * as THREE from 'three';
 
 const loadCanvas = document.getElementById('js-transitionCanvas');
 const loader = document.querySelector('.js-transition');
