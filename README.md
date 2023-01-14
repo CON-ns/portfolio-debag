@@ -1,2 +1,1 @@
-# yuuki-kon
 # portfolio-debag
