@@ -435,3 +435,6 @@ const sa = new StickAnime(document.querySelectorAll(".wrapper"),50);
 sa.stickyMovePx();
 // const sa = new StickAnime(document.querySelectorAll(".wrapper"));
 // sa.stickyMovePar();
+
+
+

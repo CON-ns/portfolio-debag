@@ -505,6 +505,21 @@ const st = new SplitText(
   "js-splitPart"
 );
 
+const splitText = new SplitText(document.querySelectorAll(".js-splitTarget"), "js-splitOnly");
+gsap.fromTo(".js-splitOnly", {
+  opacity: 0.1,
+}, {
+  opacity: 1,
+  stagger: {
+    from: "random",
+    each: 0.02,
+  },
+  scrollTrigger: {
+    trigger: ".p-about__txt",
+    start:"0px"
+  }
+})
+
 //----------------------------------------------------------------
 //FVのテキストをパララックスさせる
 function fvParallax() {
@@ -736,7 +751,6 @@ function worksSlide() {
   }
   getOnMouse();
 }
-
 //----------------------------------------------------------------
 //流れるテキスト
 
