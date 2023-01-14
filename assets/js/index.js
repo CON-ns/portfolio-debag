@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "./three";
 import { GetScrollNum } from "./_class.js";
 import { ScrollFunction } from "./_class.js";
 import { ScrollObserver } from "./_class.js";
