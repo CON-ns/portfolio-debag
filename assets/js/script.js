@@ -9,7 +9,7 @@ let scrollY; //スクロール量格納用
 window.addEventListener('DOMContentLoaded', function () {
   mediaQueryFunc();
   mediaReload();
-  playgroundLink();
+  // playgroundLink();
 });
 
 
