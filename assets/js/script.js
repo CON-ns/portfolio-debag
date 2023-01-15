@@ -1,11 +1,7 @@
-import * as THREE from "three";
+import * as THREE from "//unpkg.com/three@0.148.0/build/three.module.js";
 import { FontLoader } from "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
-import { GetScrollNum } from "./_class.js";
-import { ScrollFunction } from "./_class.js";
 import { ScrollObserver } from "./_class.js";
-import { SplitTextAnimation } from "./_class.js";
-import { SplitText } from "./_class.js";
 import { StickAnime } from "./_class.js";
 
 let scrollY; //スクロール量格納用
