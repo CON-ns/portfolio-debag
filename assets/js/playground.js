@@ -1,6 +1,4 @@
-import * as THREE from "three";
-import { FontLoader } from "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
-import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
+import * as THREE from "//unpkg.com/three@0.148.0/build/three.module.js";
 
 let mediaQueryPCLarge, mediaQueryPC, mediaQueryTablet, mediaQueryMobile, mediaFlag; //メディアクエリ用変数
 let canvasHeight = innerHeight;

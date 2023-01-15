@@ -1,6 +1,6 @@
 import * as THREE from "//unpkg.com/three@0.148.0/build/three.module.js";
-import { FontLoader } from "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
-import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
+import { FontLoader } from "//unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "//unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
 import { ScrollObserver } from "./_class.js";
 import { StickAnime } from "./_class.js";
 

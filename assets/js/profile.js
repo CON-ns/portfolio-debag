@@ -1,5 +1,5 @@
 import { ScrollObserver } from "./_class.js";
-import * as THREE from "three";
+import * as THREE from "//unpkg.com/three@0.148.0/build/three.module.js";
 import { FontLoader } from "https://unpkg.com/three@0.148.0/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "https://unpkg.com/three@0.148.0/examples/jsm/geometries/TextGeometry.js";
 // import ripple from "../images/ripple.png";
