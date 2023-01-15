@@ -198,7 +198,6 @@ canvas.addEventListener('mouseout', function () {
 
 //Fonts
 const fontLoader = new FontLoader();
-// fontLoader.load("assets/fonts/droid/droid_sans_bold.typeface.json", (font) => {
 fontLoader.load("assets/fonts/optimer_regular.typeface.json", (font) => {
   const textGeometry = new TextGeometry("PLAYGROUND", {
     font: font,
