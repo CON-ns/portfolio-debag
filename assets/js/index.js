@@ -626,7 +626,7 @@ function worksSlide() {
     breakpoints: {
       768: {
         padding: "20%",
-        gap:"10vw"
+        gap:"7vw"
       },
     },
   }).mount();
