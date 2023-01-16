@@ -157,7 +157,6 @@ function mediaReload() {
 // three.js
 
 function playgroundLink() {
-  let text;
   const canvas = document.getElementById("js-playgroundCanvas");
   // Scene
   const scene = new THREE.Scene();
