@@ -173,11 +173,11 @@ function playgroundLink() {
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(-1, 2, -3);
   scene.add(camera);
-  // if (mediaFlag === "pcL" || mediaFlag === "pc") {
-  //   camera.position.set(0, 0, 0.5);
-  // } else {
-  //   camera.position.set(0, 0, 0.7);
-  // }
+  if (mediaFlag === "pcL" || mediaFlag === "pc") {
+    camera.position.set(-1, 2, -3);
+  } else {
+    camera.position.set(-1, 2, -3.5);
+  }
   scene.add(camera);
   canvas.addEventListener("mouseover", function () {
     gsap.to(camera.position, {
@@ -245,8 +245,8 @@ function playgroundLink() {
 
   window.addEventListener("resize", () => {
     // Update sizes
-    sizes.width = window.innerWidth / 2;
-    sizes.height = window.innerHeight / 3;
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight / 2;
 
     // Update renderer
     renderer.setSize(sizes.width, sizes.height);
